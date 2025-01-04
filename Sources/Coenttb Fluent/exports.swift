@@ -6,6 +6,7 @@
 //
 
 
+@_exported import Coenttb_Database
 @_exported @preconcurrency import Fluent
 @_exported @preconcurrency import FluentPostgresDriver
 @_exported import PostgresKit
