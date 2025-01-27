@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import Logging
+import Coenttb_Server_EnvVars
 
 extension Application {
     public static func configure(
@@ -20,6 +21,9 @@ extension Application {
         app.logger.info("Configuring application with environment: \(app.environment.name)")
         app.middleware.use(ErrorMiddleware.default(environment: app.environment))
         app.middleware.use(HTTPSRedirectMiddleware(on: httpsRedirect == true))
+        
+        @Dependency(\.envVars.port) var port
+        app.http.server.configuration.port = port
         
         if let canonicalHost = canonicalHost {
             app.middleware.use(

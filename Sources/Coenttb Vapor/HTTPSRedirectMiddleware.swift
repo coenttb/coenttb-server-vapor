@@ -7,6 +7,7 @@
 
 import Vapor
 import VaporRouting
+import IssueReporting
 
 public struct HTTPSRedirectMiddleware: AsyncMiddleware {
     public let on: Bool
