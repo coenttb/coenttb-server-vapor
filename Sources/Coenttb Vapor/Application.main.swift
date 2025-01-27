@@ -10,12 +10,14 @@ import Vapor
 import Dependencies
 import Coenttb_Server_Dependencies
 import Coenttb_Server_Utils
+import Coenttb_Web_EnvVars
 
 extension Application {
     public static func main(
         application: Vapor.Application,
         environment: Vapor.Environment,
         logLevel: Logger.Level,
+        corsMiddlewareConfiguration: CORSMiddleware.Configuration = .default(),
         configure: (Application) async throws -> Void
     ) async throws {
         do {
@@ -24,9 +26,19 @@ extension Application {
             } operation: {
                 @Dependency(\.application) var application
                 
+                @Dependency(\.envVars.port) var port
+                application.http.server.configuration.port = port
+                
                 application.logger.info("Application starting with environment: \(environment)")
                 
                 application.middleware = .init()
+                
+                application.middleware.use(
+                    CORSMiddleware(
+                        configuration: corsMiddlewareConfiguration
+                    )
+                )
+                
                 application.middleware.use(ErrorMiddleware.default(environment: application.environment))
                 
                 application.middleware.use { request, next in
