@@ -14,9 +14,9 @@ extension SessionsMiddleware {
         driver: any SessionDriver,
         cookieName: String = "vapor-session",
         maxAge: Int = 604_800,
-        domain: Domain? = nil,
+        domain: String? = nil,
         isSecure: Bool = true
-    ) -> SessionsMiddleware {
+    ) -> SessionsMiddleware {c
         return SessionsMiddleware(
             session: driver,
             configuration: .init(
@@ -26,7 +26,7 @@ extension SessionsMiddleware {
                     string: sessionId.string,
                     expires: Date().addingTimeInterval(Double(maxAge)),
                     maxAge: maxAge,
-                    domain: domain?.rawValue,
+                    domain: domain,
                     path: "/",
                     isSecure: isSecure,
                     isHTTPOnly: true,
