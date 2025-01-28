@@ -16,7 +16,7 @@ extension SessionsMiddleware {
         maxAge: Int = 604_800,
         domain: String? = nil,
         isSecure: Bool = true
-    ) -> SessionsMiddleware {c
+    ) -> SessionsMiddleware {
         return SessionsMiddleware(
             session: driver,
             configuration: .init(
