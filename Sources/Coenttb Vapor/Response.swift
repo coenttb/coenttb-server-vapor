@@ -9,7 +9,7 @@ import Foundation
 import Vapor
 
 extension Response {
-    public static func success<T: Encodable>(
+    public static func success<T: Codable>(
         _ success: Bool,
         data: T? = nil,
         message: String? = nil,
@@ -29,10 +29,10 @@ extension Response {
     }
 }
 
-private struct EmptyResponse: Encodable {}
+private struct EmptyResponse: Codable {}
 
 extension Response {
-    public static func json<T: Encodable>(
+    public static func json<T: Codable>(
         success: Bool,
         data: T? = nil,
         message: String? = nil,
@@ -66,7 +66,7 @@ extension Response {
 }
 
 extension Response {
-    public struct Envelope<T: Encodable>: Encodable {
+    public struct Envelope<T: Codable>: Codable {
         public let success: Bool
         public let data: T?
         public let message: String?
@@ -89,6 +89,14 @@ extension Response {
             try container.encodeIfPresent(data, forKey: .data)
             try container.encodeIfPresent(message, forKey: .message)
             try container.encode(timestamp, forKey: .timestamp)
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            success = try container.decode(Bool.self, forKey: .success)
+            data = try container.decodeIfPresent(T.self, forKey: .data)
+            message = try container.decodeIfPresent(String.self, forKey: .message)
+            timestamp = try container.decode(Date.self, forKey: .timestamp)
         }
     }
 }
