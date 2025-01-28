@@ -7,12 +7,14 @@
 
 import Foundation
 import Vapor
+import Domain
 
 extension SessionsMiddleware {
     public static func secure(
         driver: any SessionDriver,
         cookieName: String = "vapor-session",
         maxAge: Int = 604_800,
+        domain: Domain? = nil,
         isSecure: Bool = true
     ) -> SessionsMiddleware {
         return SessionsMiddleware(
@@ -24,7 +26,7 @@ extension SessionsMiddleware {
                     string: sessionId.string,
                     expires: Date().addingTimeInterval(Double(maxAge)),
                     maxAge: maxAge,
-                    domain: nil,
+                    domain: domain?.rawValue,
                     path: "/",
                     isSecure: isSecure,
                     isHTTPOnly: true,
