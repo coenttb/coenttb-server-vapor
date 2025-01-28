@@ -38,7 +38,7 @@ extension Response {
         message: String? = nil,
         status: HTTPStatus = .ok
     ) -> Response {
-        let response = APIResponse(success: success, data: data, message: message)
+        let response = Response.Envelope(success: success, data: data, message: message)
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
@@ -65,29 +65,31 @@ extension Response {
     }
 }
 
-private struct APIResponse<T: Encodable>: Encodable {
-    let success: Bool
-    let data: T?
-    let message: String?
-    let timestamp: Date
-    
-    init(success: Bool, data: T?, message: String?) {
-        self.success = success
-        self.data = data
-        self.message = message
-        self.timestamp = Date()
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case success, data, message, timestamp
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(success, forKey: .success)
-        try container.encodeIfPresent(data, forKey: .data)
-        try container.encodeIfPresent(message, forKey: .message)
-        try container.encode(timestamp, forKey: .timestamp)
+extension Response {
+    public struct Envelope<T: Encodable>: Encodable {
+        public let success: Bool
+        public let data: T?
+        public let message: String?
+        public let timestamp: Date
+        
+        public init(success: Bool, data: T?, message: String?) {
+            self.success = success
+            self.data = data
+            self.message = message
+            self.timestamp = Date()
+        }
+        
+        enum CodingKeys: String, CodingKey {
+            case success, data, message, timestamp
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(success, forKey: .success)
+            try container.encodeIfPresent(data, forKey: .data)
+            try container.encodeIfPresent(message, forKey: .message)
+            try container.encode(timestamp, forKey: .timestamp)
+        }
     }
 }
 
