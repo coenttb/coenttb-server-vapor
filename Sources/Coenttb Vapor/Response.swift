@@ -42,7 +42,7 @@ extension Response {
         let response = Envelope(success: success, data: data, message: message)
         do {
             let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .secondsSince1970
+            encoder.dateEncodingStrategy = .iso8601
             encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
             let jsonData = try encoder.encode(response)
             
