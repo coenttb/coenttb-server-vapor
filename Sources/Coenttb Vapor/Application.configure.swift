@@ -18,6 +18,15 @@ extension Application {
         baseUrl: URL
     ) async throws {
         app.logger.info("Configuring application with environment: \(app.environment.name)")
+        
+        app.middleware.use { request, next in
+            return try await withDependencies {
+                $0.request = request
+            } operation: {
+                try await next.respond(to: request)
+            }
+        }
+        
         app.middleware.use(ErrorMiddleware.default(environment: app.environment))
         app.middleware.use(HTTPSRedirectMiddleware(on: httpsRedirect == true))
         

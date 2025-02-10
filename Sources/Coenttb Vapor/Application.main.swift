@@ -33,14 +33,6 @@ extension Application {
                 
                 application.middleware = .init()
                 
-                application.middleware.use { request, next in
-                    return try await withDependencies {
-                        $0.request = request
-                    } operation: {
-                        try await next.respond(to: request)
-                    }
-                }
-                
                 application.middleware.use(
                     CORSMiddleware(configuration: corsMiddlewareConfiguration)
                 )
