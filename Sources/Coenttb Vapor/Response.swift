@@ -154,3 +154,17 @@ public extension Response {
     static var notExtended: Response { .init(status: .notExtended) }
     static var networkAuthenticationRequired: Response { .init(status: .networkAuthenticationRequired) }
 }
+
+
+extension Vapor.Response {
+    public func expire(
+        cookies: [WritableKeyPath<HTTPCookies, HTTPCookies.Value?>]
+    )  {
+        let cookieValues = cookies.compactMap { $0 }
+        
+        cookieValues.forEach { cookie in
+            self.cookies[keyPath: cookie]?.string = ""
+            self.cookies[keyPath: cookie]?.expires = .distantPast
+        }
+    }
+}
