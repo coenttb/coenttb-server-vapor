@@ -163,7 +163,6 @@ extension Vapor.Response {
         let cookieValues = cookies.compactMap { $0 }
         
         cookieValues.forEach { cookie in
-            self.cookies[keyPath: cookie]?.string = ""
             self.cookies[keyPath: cookie]?.expires = .distantPast
         }
     }
