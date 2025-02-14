@@ -159,11 +159,15 @@ public extension Response {
 extension Vapor.Response {
     public func expire(
         cookies: [WritableKeyPath<HTTPCookies, HTTPCookies.Value?>]
-    )  {
-        let cookieValues = cookies.compactMap { $0 }
+    ) {
+        @Dependency(\.request) var request
+        guard let request else { return }
         
-        cookieValues.forEach { cookie in
-            self.cookies[keyPath: cookie]?.expires = .distantPast
+        cookies.forEach { cookiePath in
+            if var cookie = request.cookies[keyPath: cookiePath] {
+                cookie.expires = .distantPast
+                self.cookies[keyPath: cookiePath] = cookie
+            }
         }
     }
 }
