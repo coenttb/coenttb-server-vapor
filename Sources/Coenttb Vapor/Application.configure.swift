@@ -15,19 +15,20 @@ extension Application {
         httpsRedirect: Bool?,
         canonicalHost: String?,
         allowedInsecureHosts: [String]?,
-        baseUrl: URL
+        baseUrl: URL,
+        errorMiddleware: (Vapor.Environment) -> ErrorMiddleware = ErrorMiddleware.default(environment:)
     ) async throws {
         app.logger.info("Configuring application with environment: \(app.environment.name)")
         
         app.middleware.use { request, next in
-            return try await withDependencies {
+            return try await withDependencies(from: request) {
                 $0.request = request
             } operation: {
                 try await next.respond(to: request)
             }
         }
         
-        app.middleware.use(ErrorMiddleware.default(environment: app.environment))
+        app.middleware.use(errorMiddleware(app.environment))
         app.middleware.use(HTTPSRedirectMiddleware(on: httpsRedirect == true))
         
         if let canonicalHost = canonicalHost {
