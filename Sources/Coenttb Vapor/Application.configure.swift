@@ -21,7 +21,7 @@ extension Application {
         app.logger.info("Configuring application with environment: \(app.environment.name)")
         
         app.middleware.use { request, next in
-            return try await withDependencies(from: request) {
+            return try await withDependencies {
                 $0.request = request
             } operation: {
                 try await next.respond(to: request)
