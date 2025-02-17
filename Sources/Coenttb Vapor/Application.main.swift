@@ -35,14 +35,14 @@ extension Application {
             application.middleware = .init()
             
             application.middleware.use(
-                CORSMiddleware(
-                    configuration: corsMiddlewareConfiguration
+                ErrorMiddleware.default(
+                    environment: application.environment
                 )
             )
             
             application.middleware.use(
-                ErrorMiddleware.default(
-                    environment: application.environment
+                CORSMiddleware(
+                    configuration: corsMiddlewareConfiguration
                 )
             )
             

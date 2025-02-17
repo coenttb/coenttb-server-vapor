@@ -10,28 +10,13 @@ import Vapor
 import Logging
 import Coenttb_Web_EnvVars
 
-
-
 extension Application {
     public static func configure(
         app: Application,
-        httpsRedirect: Bool? = {
-            @Dependency(\.envVars.httpsRedirect) var httpsRedirect
-            return httpsRedirect
-        }(),
-        canonicalHost: String? = {
-            @Dependency(\.envVars.canonicalHost) var canonicalHost
-            return canonicalHost
-        }(),
-        allowedInsecureHosts: [String]? = {
-            @Dependency(\.envVars.allowedInsecureHosts) var allowedInsecureHosts
-            return allowedInsecureHosts
-        }(),
-        baseUrl: URL = {
-            @Dependency(\.envVars.baseUrl) var baseUrl
-            return baseUrl
-        }(),
-        errorMiddleware: (Vapor.Environment) -> ErrorMiddleware = ErrorMiddleware.default(environment:)
+        httpsRedirect: Bool?,
+        canonicalHost: String?,
+        allowedInsecureHosts: [String]?,
+        baseUrl: URL
     ) async throws {
         @Dependency(\.envVars) var envVars
         
@@ -46,8 +31,6 @@ extension Application {
                 try await next.respond(to: request)
             }
         }
-        
-        app.middleware.use(errorMiddleware(app.environment))
         
         app.middleware.use(HTTPSRedirectMiddleware(on: httpsRedirect == true))
         
