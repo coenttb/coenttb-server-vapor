@@ -14,7 +14,7 @@ extension Vapor.Environment {
 }
 
 extension Vapor.Environment {
-    package init(envVarsEnvironment: EnvVars.AppEnv) {
+    public init(envVarsEnvironment: EnvVars.AppEnv) {
         self = switch envVarsEnvironment {
         case .development: .development
         case .production: .production
