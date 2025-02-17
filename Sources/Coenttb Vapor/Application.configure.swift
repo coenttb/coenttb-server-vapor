@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import Logging
+import Coenttb_Web_EnvVars
 
 extension Application {
     public static func configure(
@@ -18,6 +19,10 @@ extension Application {
         baseUrl: URL,
         errorMiddleware: (Vapor.Environment) -> ErrorMiddleware = ErrorMiddleware.default(environment:)
     ) async throws {
+        @Dependency(\.envVars) var envVars
+        
+        app.environment = .init(envVarsEnvironment: envVars.appEnv)
+        
         app.logger.info("Configuring application with environment: \(app.environment.name)")
         
         app.middleware.use { request, next in
@@ -29,6 +34,7 @@ extension Application {
         }
         
         app.middleware.use(errorMiddleware(app.environment))
+        
         app.middleware.use(HTTPSRedirectMiddleware(on: httpsRedirect == true))
         
         if let canonicalHost = canonicalHost {
