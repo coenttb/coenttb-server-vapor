@@ -7,7 +7,19 @@
 
 import Foundation
 import Vapor
+import Coenttb_Web_EnvVars
 
 extension Vapor.Environment {
     public static let staging: Self = .custom(name: "staging")
+}
+
+extension Vapor.Environment {
+    package init(envVarsEnvironment: EnvVars.AppEnv) {
+        self = switch envVarsEnvironment {
+        case .development: .development
+        case .production: .production
+        case .staging: .staging
+        case .testing: .testing
+        }
+    }
 }
