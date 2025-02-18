@@ -51,7 +51,7 @@ let package = Package(
                 .fluentPostgresDriver,
                 .postgresKit,
                 .rateLimiter,
-                .vapor,
+                .coenttbVapor,
             ]
         ),
         .target(
@@ -60,7 +60,7 @@ let package = Package(
                 .coenttbServer,
                 .vapor,
                 .vaporRouting,
-                .rateLimiter
+                .rateLimiter,
             ]
         ),
         

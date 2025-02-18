@@ -9,12 +9,21 @@ import Foundation
 import Dependencies
 import Fluent
 import IssueReporting
+import Coenttb_Vapor
 
 public enum DatabaseKey {}
 
 extension DatabaseKey: TestDependencyKey {
-    public static let testValue: (any Fluent.Database) = {
-        fatalError()
+    public static let testValue: (any Fluent.Database) = liveValue
+}
+
+extension DatabaseKey: DependencyKey {
+    public static let liveValue: (any Fluent.Database) = {
+        @Dependency(\.request?.db) var request
+        @Dependency(\.application.db) var application
+        
+        return request ?? application
+        
     }()
 }
 
@@ -24,5 +33,6 @@ extension DependencyValues {
         set { self[DatabaseKey.self] = newValue }
     }
 }
+
 
 

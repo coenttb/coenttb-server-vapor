@@ -5,9 +5,31 @@
 //  Created by Coen ten Thije Boonkkamp on 19/12/2024.
 //
 
+
+import Coenttb_Server_Utils
+import Dependencies
 import Foundation
 import Vapor
-import Coenttb_Server_Utils
+
+extension Vapor.Request: @retroactive DependencyKey {
+    public static let testValue: Vapor.Request? = nil
+    public static let liveValue: Vapor.Request? = nil
+}
+
+extension DependencyValues {
+    public var request: Vapor.Request? {
+        get { self[Vapor.Request.self] }
+        set { self[Vapor.Request.self] = newValue }
+    }
+}
+
+public struct RequestError: Error {
+    let int: Int
+
+    public init(_ int: Int) {
+        self.int = int
+    }
+}
 
 extension Request {
     /// Attempts to extract geolocation information from request headers
