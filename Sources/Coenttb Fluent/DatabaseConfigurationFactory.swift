@@ -11,7 +11,7 @@ import PostgresKit
 import Fluent
 
 extension DatabaseConfigurationFactory {
-    static var postgres: Self {
+    public static var postgres: Self {
         @Dependency(\.sqlConfiguration) var sqlConfiguration
         @Dependency(\.databaseConfiguration) var databaseConfiguration
         
