@@ -8,6 +8,8 @@
 import Foundation
 import Vapor
 import URLRouting
+
+#if compiler(>=6.0) && canImport(Testing)
 import VaporTesting
 
 extension TestingHTTPRequest {
@@ -77,3 +79,4 @@ extension TestingHTTPRequest {
         self.init(method: method, url: url, headers: headers, body: body)
     }
 }
+#endif
