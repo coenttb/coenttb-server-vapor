@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Vapor
+import Coenttb_Vapor
 import URLRouting
 
 #if compiler(>=6.0) && canImport(Testing)

@@ -6,11 +6,13 @@ import PackageDescription
 extension String {
     static let coenttbFluent: Self = "Coenttb Fluent"
     static let coenttbVapor: Self = "Coenttb Vapor"
+    static let coenttbVaporTesting: Self = "Coenttb Vapor Testing"
 }
 
 extension Target.Dependency {
     static var coenttbVapor: Self { .target(name: .coenttbVapor) }
     static var coenttbFluent: Self { .target(name: .coenttbFluent) }
+    static var coenttbVaporTesting: Self { .target(name: .coenttbVaporTesting) }
 }
 
 extension Target.Dependency {
@@ -33,6 +35,7 @@ let package = Package(
     products: [
         .library(name: .coenttbVapor, targets: [.coenttbVapor]),
         .library(name: .coenttbFluent, targets: [.coenttbFluent]),
+        .library(name: .coenttbVaporTesting, targets: [.coenttbVaporTesting]),
     ],
     dependencies: [
         .package(url: "https://github.com/coenttb/coenttb-utils.git", branch: "main"),
@@ -63,6 +66,12 @@ let package = Package(
                 .vapor,
                 .vaporRouting,
                 .rateLimiter,
+            ]
+        ),
+        .target(
+            name: .coenttbVaporTesting,
+            dependencies: [
+                .coenttbVapor,
                 .vaporTesting,
             ]
         ),
