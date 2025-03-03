@@ -20,6 +20,7 @@ extension Target.Dependency {
     static var postgresKit: Self { .product(name: "PostgresKit", package: "postgres-kit") }
     static var vapor: Self { .product(name: "Vapor", package: "vapor") }
     static var vaporRouting: Self { .product(name: "VaporRouting", package: "vapor-routing") }
+    static var vaporTesting: Self { .product(name: "VaporTesting", package: "vapor") }
     static var fluentPostgresDriver: Self { .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver") }
 }
 
@@ -41,6 +42,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.7.2"),
         .package(url: "https://github.com/vapor/postgres-kit", from: "2.12.0"),
         .package(url: "https://github.com/vapor/vapor.git", from: "4.102.1"),
+        
     ],
     targets: [
         .target(
@@ -61,6 +63,7 @@ let package = Package(
                 .vapor,
                 .vaporRouting,
                 .rateLimiter,
+                .vaporTesting,
             ]
         ),
         
