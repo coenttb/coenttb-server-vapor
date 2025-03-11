@@ -8,7 +8,7 @@
 import Foundation
 import Vapor
 
-public struct VaporDocCMiddleware: Middleware {
+public struct VaporDocCMiddleware: AsyncMiddleware {
     public let archivePath: URL
     public let redirectRoot: String?
     public let redirectMissingTrailingSlash: Bool
@@ -20,23 +20,18 @@ public struct VaporDocCMiddleware: Middleware {
         self.redirectMissingTrailingSlash = redirectMissingTrailingSlash
     }
     
-    public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
-        guard var path = request.url.path.removingPercentEncoding else {
-            return request.eventLoop.makeFailedFuture(Abort(.badRequest))
-        }
+    public func respond(to request: Vapor.Request, chainingTo next: any Vapor.AsyncResponder) async throws -> Vapor.Response {
+        guard var path = request.url.path.removingPercentEncoding
+        else { throw Abort(.badRequest) }
         
-        guard !path.contains("../") else {
-            return request.eventLoop.makeFailedFuture(Abort(.forbidden))
-        }
+        guard !path.contains("../")
+        else { throw Abort(.forbidden) }
         
-        guard path.hasPrefix(self.prefix) else {
-            return request.eventLoop.makeFailedFuture(Abort(.forbidden))
-        }
+        guard path.hasPrefix(self.prefix)
+        else { throw Abort(.forbidden) }
         
         if path == self.prefix, let redirectRoot = redirectRoot {
-            return request.eventLoop.makeSucceededFuture(
-                request.redirect(to: redirectRoot)
-            )
+             return request.redirect(to: redirectRoot)
         }
         
         path = String(path.dropFirst(self.prefix.count))
@@ -49,20 +44,18 @@ public struct VaporDocCMiddleware: Middleware {
         for indexPrefix in indexPrefixes where path.hasPrefix(indexPrefix) {
             if indexPrefixes.contains(path) {
                 if redirectMissingTrailingSlash {
-                    return request.eventLoop.makeSucceededFuture(
-                        request.redirect(to: self.prefix + path + "/")
-                    )
+                    return request.redirect(to: self.prefix + path + "/")
                 } else {
-                    return next.respond(to: request)
+                    return try await next.respond(to: request)
                 }
             }
             
-            return serveStaticFileRelativeToArchive("index.html", request: request)
+            return try await serveStaticFileRelativeToArchive("index.html", request: request)
         }
         
         if path == "data/documentation.json" {
             if FileManager.default.fileExists(atPath: archivePath.appendingPathComponent("data/documentation.json", isDirectory: true).path) {
-                return serveStaticFileRelativeToArchive("data/documentation.json", request: request)
+                return try await serveStaticFileRelativeToArchive("data/documentation.json", request: request)
             }
             
             request.logger.info("\(self.prefix)data/documentation.json was not found, attempting to find product's JSON in /data/documentation/ directory")
@@ -71,12 +64,12 @@ public struct VaporDocCMiddleware: Middleware {
             do {
                 let contents = try FileManager.default.contentsOfDirectory(atPath: documentationPath.path)
                 guard let productJSON = contents.first(where: { $0.hasSuffix(".json") }) else {
-                    return next.respond(to: request)
+                    return try await next.respond(to: request)
                 }
                 
-                return serveStaticFileRelativeToArchive("data/documentation/\(productJSON)", request: request)
+                return try await serveStaticFileRelativeToArchive("data/documentation/\(productJSON)", request: request)
             } catch {
-                return next.respond(to: request)
+                return try await next.respond(to: request)
             }
         }
         
@@ -88,7 +81,7 @@ public struct VaporDocCMiddleware: Middleware {
         ]
         
         for staticFile in staticFiles where path == staticFile {
-            return serveStaticFileRelativeToArchive(staticFile, request: request)
+            return try await serveStaticFileRelativeToArchive(staticFile, request: request)
         }
         
         let staticFilePrefixes = [
@@ -103,21 +96,19 @@ public struct VaporDocCMiddleware: Middleware {
         ]
         
         for staticFilePrefix in staticFilePrefixes where path.hasPrefix(staticFilePrefix) {
-            return serveStaticFileRelativeToArchive(path, request: request)
+            return try await serveStaticFileRelativeToArchive(path, request: request)
         }
         
-        return next.respond(to: request)
+        return try await next.respond(to: request)
     }
     
-    private func serveStaticFileRelativeToArchive(_ staticFilePath: String, request: Request) -> EventLoopFuture<Response> {
+    private func serveStaticFileRelativeToArchive(_ staticFilePath: String, request: Request) async throws -> Response {
         let staticFilePath = archivePath.appendingPathComponent(staticFilePath, isDirectory: false)
-        return request.eventLoop.makeSucceededFuture(
-            request
-                .fileio
-                .streamFile(
-                    at: staticFilePath.path
-                )
-        )
+        return try await request
+            .fileio
+            .asyncStreamFile(
+                at: staticFilePath.path
+            )
     }
 }
 

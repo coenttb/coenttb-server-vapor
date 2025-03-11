@@ -37,9 +37,9 @@ extension RateLimiter {
                 return Response(
                     status: .tooManyRequests,
                     headers: .init([
-                        ("X-RateLimit-Limit", "\(result.currentAttempts + result.remainingAttempts)"),
-                        ("X-RateLimit-Remaining", "\(result.remainingAttempts)"),
-                        ("X-RateLimit-Reset", "\(result.nextAllowedAttempt?.timeIntervalSince1970 ?? 0)")
+                        (HTTPHeaders.Name.xRateLimitLimit.description, "\(result.currentAttempts + result.remainingAttempts)"),
+                        (HTTPHeaders.Name.xRateLimitRemaining.description, "\(result.remainingAttempts)"),
+                        (HTTPHeaders.Name.xRateLimitReset.description, "\(result.nextAllowedAttempt?.timeIntervalSince1970 ?? 0)")
                     ])
                 )
             }
