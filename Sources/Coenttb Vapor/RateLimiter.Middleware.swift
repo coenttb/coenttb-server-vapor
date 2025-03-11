@@ -47,7 +47,7 @@ extension RateLimiter {
             let response = try await next.respond(to: request)
             
             response.headers.add(
-                name: "X-RateLimit-Remaining",
+                name: .xRateLimitRemaining,
                 value: "\(result.remainingAttempts)"
             )
             return response

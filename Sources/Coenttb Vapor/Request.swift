@@ -35,9 +35,9 @@ extension Request {
     /// Attempts to extract geolocation information from request headers
     public var geoLocation: GeoLocation? {
         // Cloudflare headers
-        let country = headers.first(name: "CF-IPCountry")
-        let region = headers.first(name: "CF-Region")
-        let city = headers.first(name: "CF-City")
+        let country = headers.first(name: .cfIpCountry)
+        let region = headers.first(name: .cfRegion)
+        let city = headers.first(name: .cfCity)
         
         // If any geolocation data is present, return it
         if country != nil || region != nil || city != nil {
@@ -56,17 +56,17 @@ extension Request {
     /// Gets the real IP address considering various headers
     public var realIP: String {
         // Try Cloudflare header first
-        if let cfConnectingIP = headers.first(name: "CF-Connecting-IP") {
+        if let cfConnectingIP = headers.first(name: .cfConnectingIp) {
             return cfConnectingIP
         }
         
         // Then try X-Real-IP
-        if let xRealIP = headers.first(name: "X-Real-IP") {
+        if let xRealIP = headers.first(name: .xRealIp) {
             return xRealIP
         }
         
         // Then try X-Forwarded-For (first IP in the list)
-        if let forwardedFor = headers.first(name: "X-Forwarded-For")?.split(separator: ",").first {
+        if let forwardedFor = headers.first(name: .xForwardedFor)?.split(separator: ",").first {
             return String(forwardedFor).trimmingCharacters(in: .whitespaces)
         }
         

@@ -18,4 +18,9 @@ extension HTTPHeaders.Name {
     public static let xForwardedProto:Self = "X-Forwarded-Proto"
     public static let strictTransportSecurity:Self = "Strict-Transport-Security"
     public static let reauthorization: Self = "Reauthorization"
+    public static let xRealIp: Self = "X-Real-IP"
+    public static let cfConnectingIp: Self = "CF-Connecting-IP"
+    public static let cfIpCountry: Self = "CF-IPCountry"
+    public static let cfRegion: Self = "CF-Region"
+    public static let cfCity: Self = "CF-City"
 }
