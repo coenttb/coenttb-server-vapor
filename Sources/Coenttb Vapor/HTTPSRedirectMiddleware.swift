@@ -51,7 +51,3 @@ public struct HTTPSRedirectMiddleware: AsyncMiddleware {
     }
 }
 
-extension HTTPHeaders.Name {
-    public static let xForwardedProto = HTTPHeaders.Name("X-Forwarded-Proto")
-    public static let strictTransportSecurity = HTTPHeaders.Name("Strict-Transport-Security")
-}
