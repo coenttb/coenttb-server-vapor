@@ -13,7 +13,7 @@ import Coenttb_Server_Utils
 import Coenttb_Web_EnvVars
 
 extension Application {
-    public static func main(
+    public static func execute(
         application: Vapor.Application,
         environment: Vapor.Environment,
         logLevel: Logger.Level,
@@ -86,4 +86,3 @@ extension Application {
         }
     }
 }
-

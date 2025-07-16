@@ -12,7 +12,7 @@ import Coenttb_Web_EnvVars
 
 extension Application {
     public static func configure(
-        app: Application,
+        application: Application,
         httpsRedirect: Bool?,
         canonicalHost: String?,
         allowedInsecureHosts: [String]?,
@@ -20,11 +20,11 @@ extension Application {
     ) async throws {
         @Dependency(\.envVars) var envVars
         
-        app.environment = .init(envVarsEnvironment: envVars.appEnv)
+        application.environment = .init(envVarsEnvironment: envVars.appEnv)
         
-        app.logger.info("Configuring application with environment: \(app.environment.name)")
+        application.logger.info("Configuring application with environment: \(application.environment.name)")
         
-        app.middleware.use { request, next in
+        application.middleware.use { request, next in
             return try await withDependencies {
                 $0.request = request
             } operation: {
@@ -32,19 +32,19 @@ extension Application {
             }
         }
         
-        app.middleware.use(HTTPSRedirectMiddleware(on: httpsRedirect == true))
+        application.middleware.use(HTTPSRedirectMiddleware(on: httpsRedirect == true))
         
         if let canonicalHost = canonicalHost {
-            app.middleware.use(
+            application.middleware.use(
                 CanonicalHostMiddleware(
                     canonicalHost: canonicalHost,
                     allowedInsecureHosts: allowedInsecureHosts ?? [],
                     baseUrl: baseUrl,
-                    logger: app.logger
+                    logger: application.logger
                 )
             )
         }
         
-        app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+        application.middleware.use(FileMiddleware(publicDirectory: application.directory.publicDirectory))
     }
 }
