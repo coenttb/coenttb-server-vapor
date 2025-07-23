@@ -10,7 +10,7 @@ import Vapor
 import Dependencies
 import Coenttb_Server_Dependencies
 import Coenttb_Server_Utils
-import Coenttb_Web_EnvVars
+import Coenttb_Server_EnvVars
 
 extension Application {
     public static func execute(
@@ -46,35 +46,7 @@ extension Application {
                 )
             )
             
-            application.middleware.use { request, next in
-                let timer = RequestTimer()
-                do {
-                    let response = try await next.respond(to: request)
-                    
-                    let message = [
-                        "\(response.status.code)",
-                        "\(timer.milliseconds)ms",
-                        "\(request.method) \(request.url.string)",
-                        "request-id=\(request.id)"
-                    ]
-                        .joined(separator: " | ")
-                    
-                    request.logger.log(
-                        level: .info,
-                        "\(message)"
-                    )
-                    
-                    return response
-                } catch {
-                    request.logger.log(
-                        level: .error,
-                        "\(request.method) \(request.url.string) -> ERROR [\(timer.milliseconds)ms]: \(error)",
-                        metadata: ["request-id": .string(request.id)]
-                    )
-                    
-                    throw error
-                }
-            }
+            application.middleware.use(RequestTimingMiddleware())
             
             try await configure(application)
             try await application.execute()
