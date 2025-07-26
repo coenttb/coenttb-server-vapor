@@ -8,6 +8,7 @@
 .swiftpm
 *.swiftpm/
 *.swiftlint.yml
+Package.resolved
 
 # Node artifact files
 node_modules/
@@ -64,3 +65,5 @@ github_token.txt
 # Exclude specific env file
 !.env.example
 .env-development
+
+Package.resolved
