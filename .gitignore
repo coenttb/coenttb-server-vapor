@@ -8,7 +8,7 @@
 .swiftpm
 *.swiftpm/
 *.swiftlint.yml
-
+coenttb-server-vapor
 
 # Node artifact files
 node_modules/
