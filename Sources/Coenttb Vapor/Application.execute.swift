@@ -9,8 +9,7 @@ import Foundation
 import Vapor
 import Dependencies
 import Coenttb_Server_Dependencies
-import Coenttb_Server_Utils
-import Coenttb_Server_EnvVars
+import Coenttb_Server
 
 extension Application {
     public static func execute(
