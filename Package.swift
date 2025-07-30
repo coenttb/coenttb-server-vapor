@@ -21,7 +21,7 @@ extension Target.Dependency {
     static var fluent: Self { .product(name: "Fluent", package: "fluent") }
     static var fluentPostgresDriver: Self { .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver") }
     static var postgresKit: Self { .product(name: "PostgresKit", package: "postgres-kit") }
-    static var rateLimiter: Self { .product(name: "RateLimiter", package: "coenttb-utils") }
+    static var rateLimiter: Self { .product(name: "RateLimiter", package: "swift-ratelimiter") }
     static var vapor: Self { .product(name: "Vapor", package: "vapor") }
     static var vaporRouting: Self { .product(name: "VaporRouting", package: "vapor-routing") }
     static var vaporTesting: Self { .product(name: "VaporTesting", package: "vapor") }
@@ -40,8 +40,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/coenttb/coenttb-server.git", branch: "main"),
-        .package(url: "https://github.com/coenttb/coenttb-utils.git", branch: "main"),
         .package(url: "https://github.com/coenttb/coenttb-web.git", branch: "main"),
+        .package(url: "https://github.com/coenttb/swift-ratelimiter.git", from: "0.0.1"),
         .package(url: "https://github.com/pointfreeco/vapor-routing.git", from: "0.1.3"),
         .package(url: "https://github.com/vapor/fluent.git", from: "4.8.0"),
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.7.2"),
