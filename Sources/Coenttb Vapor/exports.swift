@@ -13,5 +13,6 @@
 
 @_exported @preconcurrency import Vapor
 @_exported import VaporRouting
+@_exported import ServerFoundationVapor
 
 

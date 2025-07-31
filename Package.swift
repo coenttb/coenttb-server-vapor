@@ -16,6 +16,9 @@ extension Target.Dependency {
 }
 
 extension Target.Dependency {
+    static var serverFoundationVapor: Self { .product(name: "ServerFoundationVapor", package: "swift-server-foundation-vapor") }
+    static var serverFoundationFluent: Self { .product(name: "ServerFoundationFluent", package: "swift-server-foundation-vapor") }
+    static var serverFoundationVaporTestSupport: Self { .product(name: "ServerFoundationVaporTestSupport", package: "swift-server-foundation-vapor") }
     static var coenttbServer: Self { .product(name: "Coenttb Server", package: "coenttb-server") }
     static var coenttbWeb: Self { .product(name: "Coenttb Web", package: "coenttb-web") }
     static var fluent: Self { .product(name: "Fluent", package: "fluent") }
@@ -41,6 +44,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/coenttb/coenttb-server.git", branch: "main"),
         .package(url: "https://github.com/coenttb/coenttb-web.git", branch: "main"),
+        .package(url: "https://github.com/coenttb/swift-server-foundation-vapor.git", branch: "main"),
         .package(url: "https://github.com/coenttb/swift-ratelimiter.git", from: "0.0.1"),
         .package(url: "https://github.com/pointfreeco/vapor-routing.git", from: "0.1.3"),
         .package(url: "https://github.com/vapor/fluent.git", from: "4.8.0"),
@@ -60,6 +64,7 @@ let package = Package(
                 .fluentPostgresDriver,
                 .postgresKit,
                 .rateLimiter,
+                .serverFoundationFluent
             ]
         ),
         .target(
@@ -70,6 +75,7 @@ let package = Package(
                 .rateLimiter,
                 .vapor,
                 .vaporRouting,
+                .serverFoundationVapor
             ]
         ),
         .target(

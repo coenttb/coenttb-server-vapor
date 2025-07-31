@@ -7,7 +7,7 @@
 
 import Foundation
 import Vapor
-import Coenttb_Web_EnvVars
+import EnvironmentVariables
 
 extension Vapor.Environment {
     public static let staging: Self = .custom(name: "staging")
