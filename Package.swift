@@ -17,9 +17,9 @@ extension Target.Dependency {
 
 extension Target.Dependency {
     static var serverFoundationVapor: Self { .product(name: "ServerFoundationVapor", package: "swift-server-foundation-vapor") }
-    static var serverFoundationFluent: Self { .product(name: "ServerFoundationFluent", package: "swift-server-foundation-vapor") }
     static var serverFoundationVaporTestSupport: Self { .product(name: "ServerFoundationVaporTestSupport", package: "swift-server-foundation-vapor") }
     static var coenttbServer: Self { .product(name: "Coenttb Server", package: "coenttb-server") }
+    static var coenttbDatabase: Self { .product(name: "Coenttb Database", package: "coenttb-server") }
     static var coenttbWeb: Self { .product(name: "Coenttb Web", package: "coenttb-web") }
     static var fluent: Self { .product(name: "Fluent", package: "fluent") }
     static var fluentPostgresDriver: Self { .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver") }
@@ -58,13 +58,13 @@ let package = Package(
             name: .coenttbFluent,
             dependencies: [
                 .coenttbServer,
+                .coenttbDatabase,
                 .coenttbVapor,
                 .coenttbWeb,
                 .fluent,
                 .fluentPostgresDriver,
                 .postgresKit,
-                .rateLimiter,
-                .serverFoundationFluent
+                .rateLimiter
             ]
         ),
         .target(

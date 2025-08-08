@@ -10,5 +10,4 @@
 @_exported @preconcurrency import Fluent
 @_exported @preconcurrency import FluentPostgresDriver
 @_exported import PostgresKit
-@_exported import ServerFoundationFluent
 
